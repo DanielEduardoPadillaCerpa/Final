@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Usuarios</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>body{background:#f1f5f9}</style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/admin/dashboard}">UTS — Admin</a>
+        <a class="btn btn-outline-light btn-sm" th:href="@{/admin/usuarios/nuevo}">
+            <i class="bi bi-person-plus me-1"></i>Nuevo
+        </a>
+    </div>
+</nav>
+<div class="container">
+    <div th:if="${exito}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${exito}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white fw-bold">
+            <i class="bi bi-people me-1"></i>Usuarios del Sistema
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover table-bordered mb-0">
+                <thead class="table-light">
+                    <tr><th>Cédula</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Facultad</th><th>Acciones</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="u : ${usuarios}">
+                        <td th:text="${u.cedula}"></td>
+                        <td class="fw-semibold" th:text="${u.nombre + ' ' + u.apellido}"></td>
+                        <td th:text="${u.correo}"></td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="${u.rol.name() == 'ADMINISTRADOR'} ? 'bg-danger' : (${u.rol.name() == 'COORDINACION'} ? 'bg-primary' : 'bg-info text-dark')"
+                                  th:text="${u.rol}"></span>
+                        </td>
+                        <td th:text="${u.facultad != null} ? ${u.facultad.nombre} : 'Global'"></td>
+                        <td>
+                            <a th:href="@{/admin/usuarios/editar/{id}(id=${u.id})}" class="btn btn-sm btn-warning me-1">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <a th:href="@{/admin/usuarios/eliminar/{id}(id=${u.id})}"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('¿Eliminar usuario?')">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

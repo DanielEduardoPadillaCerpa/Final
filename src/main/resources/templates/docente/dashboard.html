@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Docente — Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body{background:#f1f5f9}
+        .section-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 8px rgba(0,0,0,.08)}
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-success mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" th:href="@{/docente/dashboard}">UTS — Docente</a>
+        <a th:href="@{/logout}" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-box-arrow-left me-1"></i>Cerrar sesión
+        </a>
+    </div>
+</nav>
+<div class="container pb-5">
+
+    <!-- Estadística -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="section-card text-center">
+                <i class="bi bi-people-fill fs-2 text-success d-block mb-1"></i>
+                <div class="fs-3 fw-bold" th:text="${totalEstudiantes}">0</div>
+                <div class="text-muted small">Estudiantes registrados</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="section-card">
+                <h6 class="fw-bold mb-3"><i class="bi bi-search me-1 text-success"></i>Buscar por Cédula</h6>
+                <p class="text-muted small mb-3">Consulta un estudiante ingresando su número de documento.</p>
+                <a th:href="@{/docente/consulta/por-cedula}" class="btn btn-success btn-sm">
+                    <i class="bi bi-person-search me-1"></i>Ir a búsqueda
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="section-card">
+                <h6 class="fw-bold mb-3"><i class="bi bi-building me-1 text-success"></i>Buscar por Facultad</h6>
+                <p class="text-muted small mb-3">Consulta todos los estudiantes de una facultad.</p>
+                <a th:href="@{/docente/consulta/por-facultad}" class="btn btn-success btn-sm">
+                    <i class="bi bi-list-ul me-1"></i>Ir a búsqueda
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resolución Beneficios -->
+    <div class="row mt-2">
+        <div class="col-12">
+            <div class="section-card">
+                <h6 class="fw-bold mb-3 text-success">
+                    <i class="bi bi-award me-1"></i>Beneficios según Resolución — Tecnología e Ingeniería
+                </h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary">Tecnología (TyT)</h6>
+                        <ul class="list-group list-group-flush small">
+                            <li class="list-group-item">
+                                <strong>120 – 150:</strong> Exime informe final o Seminario II con nota 4.5
+                            </li>
+                            <li class="list-group-item">
+                                <strong>151 – 170:</strong> Exime informe final o Seminario II con nota 4.7 + beca 50% grado
+                            </li>
+                            <li class="list-group-item">
+                                <strong>≥ 171:</strong> Exime informe final o Seminario II con nota 5.0 + beca 100% grado
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary">Ingeniería (Saber Pro)</h6>
+                        <ul class="list-group list-group-flush small">
+                            <li class="list-group-item">
+                                <strong>180 – 210:</strong> Exime informe final o Seminario IV con nota 4.5
+                            </li>
+                            <li class="list-group-item">
+                                <strong>211 – 240:</strong> Exime informe final o Seminario IV con nota 4.7 + beca 50% grado
+                            </li>
+                            <li class="list-group-item">
+                                <strong>≥ 241:</strong> Exime informe final o Seminario IV con nota 5.0 + beca 100% grado
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

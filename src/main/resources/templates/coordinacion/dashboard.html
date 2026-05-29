@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Coordinación</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body{background:#f1f5f9}
+        .sidebar{background:#1e293b;min-height:100vh;width:240px;position:fixed}
+        .sidebar a{color:#94a3b8;text-decoration:none;display:block;padding:10px 20px;border-radius:8px;margin:2px 8px}
+        .sidebar a:hover,.sidebar a.active{background:#334155;color:#fff}
+        .main-content{margin-left:240px;padding:24px}
+        .stat-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 8px rgba(0,0,0,.08)}
+    </style>
+</head>
+<body>
+<div class="sidebar pt-4">
+    <div class="text-center mb-4" style="color:#60a5fa;font-size:1.3rem;font-weight:800">
+        <i class="bi bi-mortarboard-fill me-1"></i>UTS Coord.
+    </div>
+    <nav>
+        <a th:href="@{/coordinacion/dashboard}" class="active"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+		<a th:href="@{/coordinacion/estudiantes}">
+		    <i class="bi bi-person-lines-fill me-2"></i>Estudiantes
+		</a>
+        <a th:href="@{/coordinacion/pagos}"><i class="bi bi-credit-card me-2"></i>Pagos Saber Pro</a>
+        <hr style="border-color:#334155">
+        <a th:href="@{/logout}" class="text-danger"><i class="bi bi-box-arrow-left me-2"></i>Cerrar sesión</a>
+    </nav>
+</div>
+<div class="main-content">
+    <h4 class="fw-bold mb-4">Panel de Coordinación</h4>
+
+    <div th:if="${exito}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${exito}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card text-center">
+                <i class="bi bi-people-fill fs-2 text-primary d-block mb-1"></i>
+                <div class="fs-3 fw-bold" th:text="${totalEstudiantes}">0</div>
+                <div class="text-muted small">Total estudiantes</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card text-center">
+                <i class="bi bi-credit-card fs-2 text-warning d-block mb-1"></i>
+                <div class="fs-3 fw-bold" th:text="${pendientesPago}">0</div>
+                <div class="text-muted small">Pagos pendientes</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card text-center d-flex align-items-center justify-content-center gap-3">
+                <a th:href="@{/coordinacion/estudiantes/nuevo}" class="btn btn-primary">
+                    <i class="bi bi-person-plus me-1"></i>Nuevo Estudiante
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimos estudiantes -->
+    <div class="stat-card">
+        <h6 class="fw-bold mb-3">Últimos estudiantes registrados</h6>
+        <table class="table table-sm table-hover">
+            <thead class="table-light">
+                <tr><th>Cédula</th><th>Nombre</th><th>Programa</th><th>Examen</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="e : ${ultimosEstudiantes}">
+                    <td th:text="${e.cedula}"></td>
+                    <td th:text="${e.getNombreCompleto()}"></td>
+                    <td th:text="${e.programa != null} ? ${e.programa.nombre} : '—'"></td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="${e.tipoExamen.name() == 'TYT'} ? 'bg-info text-dark' : 'bg-primary'"
+                              th:text="${e.tipoExamen}"></span>
+                    </td>
+                    <td>
+                        <a th:href="@{/coordinacion/estudiantes/detalle/{id}(id=${e.id})}"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-eye-fill"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a th:href="@{/coordinacion/estudiantes}" class="btn btn-sm btn-outline-secondary">
+            Ver todos los estudiantes →
+        </a>
+    </div>
+	<!-- Sección Beneficios -->
+	<div class="row mt-4">
+	    <div class="col-12">
+	        <div class="section-card">
+	            <h6 class="fw-bold mb-3 text-success">
+	                <i class="bi bi-award me-1"></i> Beneficios según Resolución
+	            </h6>
+	            <div class="row g-3">
+	                <!-- Tecnología TyT -->
+	                <div class="col-md-6">
+	                    <h6 class="fw-bold text-primary">Tecnología (TyT)</h6>
+	                    <ul class="list-group list-group-flush small">
+	                        <li class="list-group-item">
+	                            <strong>120 – 150:</strong> Exime informe final o Seminario II con nota 4.5
+	                        </li>
+	                        <li class="list-group-item">
+	                            <strong>151 – 170:</strong> Exime informe final o Seminario II con nota 4.7 + beca 50% grado
+	                        </li>
+	                        <li class="list-group-item">
+	                            <strong>≥ 171:</strong> Exime informe final o Seminario II con nota 5.0 + beca 100% grado
+	                        </li>
+	                    </ul>
+	                </div>
+
+	                <!-- Ingeniería Saber Pro -->
+	                <div class="col-md-6">
+	                    <h6 class="fw-bold text-primary">Ingeniería (Saber Pro)</h6>
+	                    <ul class="list-group list-group-flush small">
+	                        <li class="list-group-item">
+	                            <strong>180 – 210:</strong> Exime informe final o Seminario IV con nota 4.5
+	                        </li>
+	                        <li class="list-group-item">
+	                            <strong>211 – 240:</strong> Exime informe final o Seminario IV con nota 4.7 + beca 50% grado
+	                        </li>
+	                        <li class="list-group-item">
+	                            <strong>≥ 241:</strong> Exime informe final o Seminario IV con nota 5.0 + beca 100% grado
+	                        </li>
+	                    </ul>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

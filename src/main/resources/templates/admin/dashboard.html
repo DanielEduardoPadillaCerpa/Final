@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Admin — Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body { background: #f1f5f9; }
+        .sidebar { background: #1e293b; min-height: 100vh; width: 240px; position: fixed; }
+        .sidebar a { color: #94a3b8; text-decoration: none; display: block; padding: 10px 20px; border-radius: 8px; margin: 2px 8px; }
+        .sidebar a:hover, .sidebar a.active { background: #334155; color: #fff; }
+        .main-content { margin-left: 240px; padding: 24px; }
+        .stat-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 8px rgba(0,0,0,.08); }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar pt-4">
+    <div class="text-center mb-4">
+        <div style="color:#60a5fa;font-size:1.4rem;font-weight:800">
+            <i class="bi bi-mortarboard-fill me-1"></i>UTS Admin
+        </div>
+    </div>
+    <nav>
+        <a th:href="@{/admin/dashboard}" class="active"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+        <a th:href="@{/admin/facultades}"><i class="bi bi-building me-2"></i>Facultades</a>
+        <a th:href="@{/admin/coordinadores}"><i class="bi bi-people-fill me-2"></i>Coordinadores</a>
+        <a th:href="@{/admin/docentes}"><i class="bi bi-person-badge me-2"></i>Docentes</a>
+        <a th:href="@{/logout}" class="text-danger"><i class="bi bi-box-arrow-left me-2"></i>Cerrar sesión</a>
+    </nav>
+</div>
+
+<!-- Contenido -->
+<div class="main-content">
+    <h4 class="fw-bold mb-4">Panel de Administrador</h4>
+
+    <div th:if="${exito}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${exito}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <i class="bi bi-building fs-2 text-warning d-block mb-1"></i>
+                <div class="fs-3 fw-bold" th:text="${totalFacultades}">0</div>
+                <div class="text-muted small">Facultades</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <i class="bi bi-people-fill fs-2 text-primary d-block mb-1"></i>
+                <div class="fs-3 fw-bold" th:text="${totalCoords}">0</div>
+                <div class="text-muted small">Coordinadores</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <i class="bi bi-person-badge fs-2 text-info d-block mb-1"></i>
+                <div class="fs-3 fw-bold" th:text="${totalDocentes}">0</div>
+                <div class="text-muted small">Docentes</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <i class="bi bi-person-check-fill fs-2 text-success d-block mb-1"></i>
+                <div class="fs-3 fw-bold" th:text="${totalUsuarios}">0</div>
+                <div class="text-muted small">Usuarios del sistema</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones rápidas -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <h6 class="fw-bold mb-3"><i class="bi bi-building me-1 text-warning"></i>Facultades</h6>
+                <a th:href="@{/admin/facultades/nuevo}" class="btn btn-warning btn-sm me-2">
+                    <i class="bi bi-plus-circle me-1"></i>Nueva
+                </a>
+                <a th:href="@{/admin/facultades}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-list-ul me-1"></i>Ver todas
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <h6 class="fw-bold mb-3"><i class="bi bi-people-fill me-1 text-primary"></i>Coordinadores</h6>
+                <a th:href="@{/admin/coordinadores/nuevo}" class="btn btn-primary btn-sm me-2">
+                    <i class="bi bi-person-plus me-1"></i>Nuevo
+                </a>
+                <a th:href="@{/admin/coordinadores}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-list-ul me-1"></i>Ver todos
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <h6 class="fw-bold mb-3"><i class="bi bi-person-badge me-1 text-info"></i>Docentes</h6>
+                <a th:href="@{/admin/docentes/nuevo}" class="btn btn-info btn-sm me-2 text-white">
+                    <i class="bi bi-person-plus me-1"></i>Nuevo
+                </a>
+                <a th:href="@{/admin/docentes}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-list-ul me-1"></i>Ver todos
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de beneficios Artículo 10 -->
+    <div class="stat-card">
+        <h6 class="fw-bold mb-3"><i class="bi bi-award me-1 text-success"></i>Artículo 10 — Beneficios por Resolución</h6>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered mb-0">
+                <thead class="table-light">
+                    <tr><th>Código</th><th>Examen</th><th>Rango</th><th>Seminario</th><th>Nota</th><th>Beca</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="b : ${beneficios}">
+                        <td><span class="badge bg-success" th:text="${b.codigo}"></span></td>
+                        <td th:text="${b.tipoExamen}"></td>
+                        <td th:text="${b.puntajeMinimo} + ' - ' + (${b.puntajeMaximo} != null ? ${b.puntajeMaximo} : '∞')"></td>
+                        <td th:text="${b.seminarioNivel}"></td>
+                        <td th:text="${b.notaSeminario}"></td>
+                        <td>
+                            <span th:if="${b.becaPorcentaje > 0}" class="badge bg-warning text-dark"
+                                  th:text="${b.becaPorcentaje} + '%'"></span>
+                            <span th:unless="${b.becaPorcentaje > 0}" class="text-muted">—</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
