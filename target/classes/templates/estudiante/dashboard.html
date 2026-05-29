@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Portal Estudiante</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body{background:#f1f5f9}
+        .section-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 8px rgba(0,0,0,.08)}
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary mb-4">
+    <div class="container">
+        <span class="navbar-brand fw-bold">
+            <i class="bi bi-mortarboard-fill me-1"></i>
+            Portal Estudiante UTS
+        </span>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-white small" th:text="${estudiante.getNombreCompleto()}"></span>
+            <a th:href="@{/estudiante/logout}" class="btn btn-outline-light btn-sm">
+                <i class="bi bi-box-arrow-left me-1"></i>Salir
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="container pb-5">
+
+    <div th:if="${exito}" class="alert alert-success alert-dismissible fade show mb-3">
+        <span th:text="${exito}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Tarjeta de identificación -->
+    <div class="section-card mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h5 class="fw-bold mb-1" th:text="${estudiante.getNombreCompleto()}"></h5>
+                <p class="text-muted mb-1">
+                    <i class="bi bi-card-text me-1"></i>
+                    <span th:text="${estudiante.tipoDocumento}"></span>:
+                    <strong th:text="${estudiante.cedula}"></strong>
+                </p>
+                <p class="text-muted mb-1">
+                    <i class="bi bi-book me-1"></i>
+                    <span th:text="${estudiante.programa != null} ? ${estudiante.programa.nombre} : '—'"></span>
+                </p>
+                <span class="badge"
+                      th:classappend="${estudiante.tipoExamen.name() == 'TYT'} ? 'bg-info text-dark' : 'bg-primary'"
+                      th:text="'Examen: ' + ${estudiante.tipoExamen}"></span>
+            </div>
+            <div class="col-md-4 text-end">
+                <div th:if="${estudiante.aprobadoSaberpro}" class="badge bg-success p-2 fs-6">
+                    <i class="bi bi-check-circle me-1"></i>Aprobado Saber Pro
+                </div>
+                <div th:unless="${estudiante.aprobadoSaberpro and estudiante.tipoExamen.name() == 'SABER_PRO'}"
+                     class="text-muted small">Estado de inscripción pendiente</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Resultado -->
+        <div class="col-md-8">
+            <div class="section-card">
+                <h6 class="fw-bold mb-3">
+                    <i class="bi bi-clipboard-data me-1 text-primary"></i>
+                    Mi Resultado —
+                    <span th:text="${estudiante.tipoExamen}"></span>
+                </h6>
+
+                <!-- TyT -->
+                <div th:if="${resultado != null and estudiante.tipoExamen.name() == 'TYT'}">
+                    <div th:if="${resultado.anulado}" class="alert alert-danger py-2">
+                        <i class="bi bi-exclamation-triangle me-1"></i>Tu examen fue anulado. Debes repetirlo.
+                    </div>
+                    <div class="text-center mb-3">
+                        <div class="display-4 fw-bold text-primary" th:text="${resultado.puntajeGlobal}"></div>
+                        <div class="text-muted" th:text="${resultado.nivelGlobal}"></div>
+                        <small class="text-muted">N° Registro: <span th:text="${resultado.numeroRegistro}"></span></small>
+                    </div>
+                    <div class="row g-2 text-center">
+                        <div class="col-6 col-md-4">
+                            <div class="bg-light rounded p-2">
+                                <div class="fw-bold" th:text="${resultado.comunicacionEscrita}"></div>
+                                <div style="font-size:.7rem" class="text-muted">Com. Escrita</div>
+                                <span class="badge bg-secondary" style="font-size:.6rem" th:text="${resultado.comunicacionEscritaNivel}"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <div class="bg-light rounded p-2">
+                                <div class="fw-bold" th:text="${resultado.razonamientoCuantitativo}"></div>
+                                <div style="font-size:.7rem" class="text-muted">Raz. Cuantitativo</div>
+                                <span class="badge bg-secondary" style="font-size:.6rem" th:text="${resultado.razonCuantNivel}"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <div class="bg-light rounded p-2">
+                                <div class="fw-bold" th:text="${resultado.lecturaCritica}"></div>
+                                <div style="font-size:.7rem" class="text-muted">Lectura Crítica</div>
+                                <span class="badge bg-secondary" style="font-size:.6rem" th:text="${resultado.lecturaCriticaNivel}"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <div class="bg-light rounded p-2">
+                                <div class="fw-bold" th:text="${resultado.competenciasCiudadanas}"></div>
+                                <div style="font-size:.7rem" class="text-muted">Comp. Ciudadanas</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <div class="bg-light rounded p-2">
+                                <div class="fw-bold" th:text="${resultado.ingles}"></div>
+                                <div style="font-size:.7rem" class="text-muted">Inglés</div>
+                                <span class="badge bg-info text-dark" style="font-size:.6rem"
+                                      th:text="${resultado.nivelInglesCertificado}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sin resultado -->
+                <div th:if="${resultado == null}" class="text-center py-4 text-muted">
+                    <i class="bi bi-hourglass-split fs-1 d-block mb-2"></i>
+                    Tus resultados aún no han sido cargados. Consulta con coordinación.
+                </div>
+            </div>
+        </div>
+
+        <!-- Lateral: pago + beneficios -->
+        <div class="col-md-4">
+
+            <!-- Pago de Prueba -->
+            <div class="section-card mb-3" th:if="${estudiante.tipoExamen != null}">
+                <h6 class="fw-bold mb-3"><i class="bi bi-credit-card me-1 text-warning"></i>Comprobante de Pago</h6>
+                <div th:if="${pago != null}">
+                    <span class="badge mb-2"
+                          th:classappend="${pago.estado.name() == 'VERIFICADO'} ? 'bg-success' : (${pago.estado.name() == 'RECHAZADO'} ? 'bg-danger' : 'bg-warning text-dark')"
+                          th:text="${pago.estado}"></span>
+                    <p class="text-muted small mb-2" th:text="${pago.nombreArchivo}"></p>
+                </div>
+                <a th:href="@{/estudiante/pago}" class="btn btn-warning btn-sm w-100">
+                    <i class="bi bi-upload me-1"></i>
+                    <span th:if="${pago == null}">Subir comprobante</span>
+                    <span th:unless="${pago == null}">Actualizar comprobante</span>
+                </a>
+            </div>
+
+            <!-- Beneficios -->
+            <div class="section-card">
+                <h6 class="fw-bold mb-3"><i class="bi bi-award me-1 text-success"></i>Beneficios Art. 10</h6>
+                <div th:each="b : ${beneficios}" class="border rounded p-2 mb-2 small">
+                    <div class="d-flex justify-content-between">
+                        <span class="badge bg-success" th:text="${b.codigo}"></span>
+                        <span th:text="${b.puntajeMinimo} + '–' + (${b.puntajeMaximo} != null ? ${b.puntajeMaximo} : '∞')"></span>
+                    </div>
+                    <div class="text-muted mt-1" th:text="${b.descripcionCorta}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

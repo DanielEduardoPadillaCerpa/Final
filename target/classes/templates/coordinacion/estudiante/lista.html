@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Estudiantes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>body{background:#f1f5f9}</style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary mb-4">
+	<div class="container-fluid d-flex justify-content-between align-items-center">
+	    <a class="navbar-brand fw-bold" th:href="@{/coordinacion/dashboard}">UTS — Coordinación</a>
+	    <div class="d-flex gap-2">
+	        <a class="btn btn-outline-light btn-sm" th:href="@{/coordinacion/estudiantes/nuevo}">
+	            <i class="bi bi-person-plus me-1"></i>Nuevo
+	        </a>
+	        <a class="btn btn-outline-light btn-sm" th:href="@{/coordinacion/dashboard}">
+	            <i class="bi bi-arrow-left me-1"></i>Regresar
+	        </a>
+	    </div>
+	</div>
+</nav>
+<div class="container-fluid px-4">
+    <div th:if="${exito}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${exito}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white fw-bold">
+            <i class="bi bi-person-lines-fill me-1"></i>Listado de Estudiantes
+            <span class="float-end badge bg-light text-primary" th:text="${#lists.size(estudiantes)} + ' registros'"></span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Cédula</th><th>Nombre completo</th><th>Correo</th>
+                            <th>Programa</th><th>Examen</th><th>Aprobado SP</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="e : ${estudiantes}">
+                            <td th:text="${e.cedula}"></td>
+                            <td class="fw-semibold" th:text="${e.getNombreCompleto()}"></td>
+                            <td th:text="${e.correo}"></td>
+                            <td th:text="${e.programa != null} ? ${e.programa.nombre} : '—'"></td>
+                            <td>
+                                <span class="badge"
+                                      th:classappend="${e.tipoExamen.name() == 'TYT'} ? 'bg-info text-dark' : 'bg-primary'"
+                                      th:text="${e.tipoExamen}"></span>
+                            </td>
+                            <td class="text-center">
+                                <i th:if="${e.aprobadoSaberpro}" class="bi bi-check-circle-fill text-success fs-5"></i>
+                                <i th:unless="${e.aprobadoSaberpro}" class="bi bi-x-circle-fill text-secondary fs-5"></i>
+                            </td>
+                            <td style="white-space:nowrap">
+                                <a th:href="@{/coordinacion/estudiantes/detalle/{id}(id=${e.id})}"
+                                   class="btn btn-sm btn-info me-1"><i class="bi bi-eye-fill"></i></a>
+                                <a th:href="@{/coordinacion/estudiantes/editar/{id}(id=${e.id})}"
+                                   class="btn btn-sm btn-warning me-1"><i class="bi bi-pencil-fill"></i></a>
+                                <a th:href="@{/coordinacion/estudiantes/eliminar/{id}(id=${e.id})}"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('¿Eliminar estudiante?')">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

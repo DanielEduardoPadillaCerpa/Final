@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Coordinador</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>body{background:#f1f5f9}</style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-warning mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-dark" th:href="@{/admin/dashboard}">UTS — Admin</a>
+        <a class="btn btn-outline-dark btn-sm" th:href="@{/admin/coordinadores}">
+            <i class="bi bi-arrow-left me-1"></i>Volver
+        </a>
+    </div>
+</nav>
+<div class="container"><div class="row justify-content-center"><div class="col-md-6">
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-dark fw-bold">
+            <i class="bi bi-people-fill me-1"></i>
+            <span th:text="${usuario.id != null} ? 'Editar Coordinador' : 'Nuevo Coordinador'"></span>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/admin/coordinadores/guardar}" th:object="${usuario}" method="post">
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" name="rol" value="COORDINACION">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Cédula</label>
+                    <input type="text" th:field="*{cedula}" class="form-control"
+                           th:classappend="${#fields.hasErrors('cedula')} ? 'is-invalid'"
+                           placeholder="Ej: 1099123456">
+                    <div class="invalid-feedback" th:errors="*{cedula}"></div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label fw-semibold">Nombre</label>
+                        <input type="text" th:field="*{nombre}" class="form-control"
+                               th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'"
+                               placeholder="Nombre">
+                        <div class="invalid-feedback" th:errors="*{nombre}"></div>
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label fw-semibold">Apellido</label>
+                        <input type="text" th:field="*{apellido}" class="form-control"
+                               th:classappend="${#fields.hasErrors('apellido')} ? 'is-invalid'"
+                               placeholder="Apellido">
+                        <div class="invalid-feedback" th:errors="*{apellido}"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Correo electrónico</label>
+                    <input type="email" th:field="*{correo}" class="form-control"
+                           th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid'"
+                           placeholder="coord@uts.edu.co">
+                    <div class="invalid-feedback" th:errors="*{correo}"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Teléfono</label>
+                    <input type="text" th:field="*{telefono}" class="form-control" placeholder="Ej: 6076800001">
+                </div>
+				<div class="mb-3">
+				    <label class="form-label fw-semibold">Facultad</label>
+					<select th:field="*{facultad.id}" class="form-select">
+					    <option value="">— Seleccione —</option>
+					    <option th:each="f : ${facultades}" th:value="${f.id}" th:text="${f.nombre}"></option>
+					</select>
+				    <div class="invalid-feedback" th:errors="*{facultad}"></div>
+				</div>
+                <div class="mb-3" th:if="${usuario.id == null}">
+                    <label class="form-label fw-semibold">Contraseña</label>
+                    <input type="password" th:field="*{contrasena}" class="form-control"
+                           th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid'"
+                           placeholder="Contraseña inicial">
+                    <div class="invalid-feedback" th:errors="*{contrasena}"></div>
+                    <div class="form-text">Solo se solicita al crear.</div>
+                </div>
+                <div class="mb-4 form-check">
+                    <input type="checkbox" th:field="*{activo}" class="form-check-input" id="activo">
+                    <label class="form-check-label" for="activo">Activo</label>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-warning text-dark fw-semibold">
+                        <i class="bi bi-floppy me-1"></i>
+                        <span th:text="${usuario.id != null} ? 'Actualizar' : 'Guardar'"></span>
+                    </button>
+                    <a th:href="@{/admin/coordinadores}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

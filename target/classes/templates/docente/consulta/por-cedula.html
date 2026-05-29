@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Buscar por Cédula</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>body{background:#f1f5f9} .section-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 8px rgba(0,0,0,.08)}</style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-success mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" th:href="@{/docente/dashboard}">UTS — Docente</a>
+        <a th:href="@{/docente/dashboard}" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Volver
+        </a>
+    </div>
+</nav>
+<div class="container pb-5">
+    <div class="section-card mb-4">
+        <h6 class="fw-bold mb-3"><i class="bi bi-person-search me-1 text-success"></i>Buscar Estudiante por Cédula</h6>
+        <form th:action="@{/docente/consulta/por-cedula/buscar}" method="get" class="d-flex gap-2">
+            <input type="text" name="cedula" class="form-control"
+                   th:value="${cedula}" placeholder="Número de cédula..." required>
+            <button type="submit" class="btn btn-success px-4">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- No encontrado -->
+    <div th:if="${noEncontrado}" class="alert alert-warning">
+        <i class="bi bi-exclamation-circle me-1"></i>No se encontró ningún estudiante con esa cédula.
+    </div>
+
+    <!-- Resultado -->
+    <div th:if="${estudiante != null}" class="section-card">
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center"
+                 style="width:52px;height:52px;flex-shrink:0">
+                <i class="bi bi-person-fill fs-3 text-success"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h5 class="fw-bold mb-0" th:text="${estudiante.getNombreCompleto()}"></h5>
+                <span class="text-muted small" th:text="${estudiante.cedula}"></span>
+                <span class="badge ms-2"
+                      th:classappend="${estudiante.tipoExamen.name() == 'TYT'} ? 'bg-info text-dark' : 'bg-primary'"
+                      th:text="${estudiante.tipoExamen}"></span>
+            </div>
+            <a th:href="@{/docente/consulta/detalle/{id}(id=${estudiante.id})}"
+               class="btn btn-success btn-sm">
+                <i class="bi bi-eye me-1"></i>Ver detalle
+            </a>
+        </div>
+        <p class="mb-1"><strong>Correo:</strong> <span th:text="${estudiante.correo}"></span></p>
+        <p class="mb-0"><strong>Programa:</strong>
+            <span th:text="${estudiante.programa != null} ? ${estudiante.programa.nombre} : '—'"></span>
+        </p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

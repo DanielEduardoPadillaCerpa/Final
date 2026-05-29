@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Estudiante — UTS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            background: #0a0f1a;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            position: fixed;
+            inset: 0;
+            background: url('/images/uts-fondo.jpg') center center / cover no-repeat;
+            filter: brightness(0.3) saturate(0.7);
+            z-index: 0;
+            transform: scale(1.05);
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            from { transform: scale(1.05); }
+            to   { transform: scale(1.12); }
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(10, 15, 26, 0.9) 0%,
+                rgba(0, 60, 120, 0.4) 50%,
+                rgba(10, 15, 26, 0.92) 100%
+            );
+            z-index: 1;
+        }
+
+        .accent-bar {
+            position: fixed;
+            right: 0; top: 0; bottom: 0;
+            width: 5px;
+            background: linear-gradient(to bottom, #60a5fa, #3b82f6, #1e3a5f);
+            z-index: 2;
+        }
+
+        .wrap {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            padding: 16px;
+            animation: fadeUp .6s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-login {
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(96, 165, 250, 0.18);
+            border-radius: 20px;
+            padding: 48px 44px;
+            box-shadow:
+                0 0 0 1px rgba(96,165,250,0.06),
+                0 32px 80px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+
+        .logo-wrap { text-align: center; margin-bottom: 36px; }
+        .logo-icon {
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, #1d4ed8, #60a5fa);
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 24px rgba(96,165,250,0.3);
+        }
+        .logo-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .logo-sub { font-size: .8rem; color: #64748b; margin-top: 4px; }
+
+        .form-label {
+            color: #94a3b8;
+            font-size: .8rem;
+            font-weight: 500;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .form-control {
+            background: rgba(255,255,255,0.04) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            border-radius: 10px !important;
+            color: #f1f5f9 !important;
+            padding: 12px 16px !important;
+            font-size: .95rem;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .form-control:focus {
+            border-color: rgba(96,165,250,0.5) !important;
+            box-shadow: 0 0 0 3px rgba(96,165,250,0.12) !important;
+            background: rgba(255,255,255,0.07) !important;
+        }
+        .form-control::placeholder { color: #475569 !important; }
+        .form-text { color: #475569 !important; font-size: .78rem; }
+
+        .btn-ingresar {
+            background: linear-gradient(135deg, #1d4ed8, #60a5fa);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 13px;
+            width: 100%;
+            letter-spacing: .5px;
+            transition: opacity .2s, transform .15s, box-shadow .2s;
+            box-shadow: 0 4px 20px rgba(96,165,250,0.3);
+            margin-top: 8px;
+        }
+        .btn-ingresar:hover {
+            opacity: .9;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(96,165,250,0.4);
+        }
+
+        .btn-prueba {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 10px;
+            color: #94a3b8;
+            font-size: .85rem;
+            padding: 10px;
+            width: 100%;
+            margin-top: 10px;
+            transition: background .2s, color .2s;
+            cursor: pointer;
+        }
+        .btn-prueba:hover { background: rgba(255,255,255,0.1); color: #e2e8f0; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 28px 0;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+        .divider span { color: #475569; font-size: .75rem; }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: .875rem;
+            transition: color .2s;
+        }
+        .back-link:hover { color: #94a3b8; }
+
+        .alert-danger {
+            background: rgba(239,68,68,0.12) !important;
+            border: 1px solid rgba(239,68,68,0.3) !important;
+            color: #fca5a5 !important;
+            border-radius: 10px;
+            font-size: .875rem;
+            padding: 10px 14px;
+        }
+
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid rgba(96,165,250,0.2);
+            border-radius: 16px;
+        }
+        .modal-header { border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .modal-footer { border-top: 1px solid rgba(255,255,255,0.08); }
+        .badge-rol {
+            background: rgba(96,165,250,0.15);
+            color: #60a5fa;
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: .75rem;
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            left: 24px;
+            z-index: 5;
+            color: rgba(255,255,255,0.2);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: .75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-image"></div>
+<div class="bg-overlay"></div>
+<div class="accent-bar"></div>
+
+<div class="wrap">
+    <div class="card-login">
+
+        <div class="logo-wrap">
+            <div class="logo-icon"><i class="bi bi-person-circle"></i></div>
+            <div class="logo-title">Portal Estudiantil</div>
+            <div class="logo-sub">Unidades Tecnológicas de Santander</div>
+            <div class="logo-sub mt-1">Consulta tus resultados Saber Pro / TyT</div>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger mb-4">
+            <i class="bi bi-exclamation-circle me-1"></i><span th:text="${error}"></span>
+        </div>
+
+        <form th:action="@{/estudiante/login}" method="post">
+            <div class="mb-3">
+                <label class="form-label">Número de cédula</label>
+                <input type="text" name="cedula" class="form-control"
+                       placeholder="Tu número de cédula" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Contraseña</label>
+                <input type="password" name="contrasena" class="form-control"
+                       placeholder="••••••••" required>
+                <div class="form-text mt-1">Por defecto: tu número de cédula</div>
+            </div>
+
+            <button type="submit" class="btn-ingresar">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Ingresar
+            </button>
+            <button type="button" class="btn-prueba"
+                    data-bs-toggle="modal" data-bs-target="#usuariosEstModal">
+                <i class="bi bi-people-fill me-1"></i>Ver estudiantes de prueba
+            </button>
+        </form>
+
+        <div class="divider"><span>Personal UTS</span></div>
+
+        <a th:href="@{/login}" class="back-link">
+            <i class="bi bi-arrow-left"></i>Volver al login de personal
+        </a>
+    </div>
+</div>
+
+<div class="watermark">UTS · Bucaramanga</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Modal Estudiantes -->
+<div class="modal fade" id="usuariosEstModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content text-white">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">
+            <i class="bi bi-person-lines-fill me-2 text-info"></i>Estudiantes del Sistema
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert py-2 mb-3" style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);color:#60a5fa;border-radius:10px">
+          <i class="bi bi-key me-1"></i>Contraseña por defecto: <strong>número de cédula del estudiante</strong>
+        </div>
+        <div class="table-responsive">
+        <table class="table table-dark table-sm align-middle mb-0">
+          <thead style="color:#64748b;font-size:.8rem;text-transform:uppercase">
+            <tr>
+              <th>Nombre</th><th>Apellido</th><th>Cédula</th><th>Examen</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="e : ${estudiantes}">
+              <td th:text="${e.primerNombre} + ' ' + (${e.segundoNombre} ?: '')"></td>
+              <td th:text="${e.primerApellido} + ' ' + (${e.segundoApellido} ?: '')"></td>
+              <td th:text="${e.cedula}"></td>
+              <td>
+                <span class="badge-rol" th:text="${e.tipoExamen}"></span>
+              </td>
+              <td>
+				<button class="btn btn-sm btn-primary fw-bold"
+				        th:attr="onclick=|document.querySelector('input[name=cedula]').value='${e.cedula}';
+				                 document.querySelector('input[name=contrasena]').value='${e.contrasena}';
+				                 bootstrap.Modal.getInstance(document.getElementById('usuariosEstModal')).hide();|">
+				    Usar
+				</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
