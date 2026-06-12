@@ -7,6 +7,8 @@
     <style>
         body{background:#f1f5f9}
         .section-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 8px rgba(0,0,0,.08)}
+        .comp-box{background:#f8f9fa;border-radius:8px;padding:12px;text-align:center}
+        .comp-box .valor{font-size:1.3rem;font-weight:700}
     </style>
 </head>
 <body>
@@ -75,28 +77,181 @@
                     <span th:text="${estudiante.tipoExamen}"></span>
                 </h6>
 
-                <!-- TyT -->
+                <!-- ── TyT ──────────────────────────────────────────── -->
                 <div th:if="${resultado != null and estudiante.tipoExamen.name() == 'TYT'}">
                     <div th:if="${resultado.anulado}" class="alert alert-danger py-2">
                         <i class="bi bi-exclamation-triangle me-1"></i>Tu examen TyT fue anulado. Debes repetirlo.
                     </div>
-                    <div class="text-center mb-3">
-                        <div class="display-4 fw-bold text-primary" th:text="${resultado.puntajeGlobal}"></div>
-                        <div class="text-muted" th:text="${resultado.nivelGlobal}"></div>
-                        <small class="text-muted">N° Registro: <span th:text="${resultado.numeroRegistro}"></span></small>
+
+                    <!-- Puntaje global calculado -->
+                    <div th:if="${resultado.comunicacionEscrita != null
+                                 and resultado.razonamientoCuantitativo != null
+                                 and resultado.lecturaCritica != null
+                                 and resultado.competenciasCiudadanas != null
+                                 and resultado.ingles != null}"
+                         th:with="globalTyt=${(resultado.comunicacionEscrita
+                                             + resultado.razonamientoCuantitativo
+                                             + resultado.lecturaCritica
+                                             + resultado.competenciasCiudadanas
+                                             + resultado.ingles) / 5}">
+                        <div class="text-center mb-4 p-4 bg-info rounded">
+                            <div class="fw-bold text-white" style="font-size:4rem;line-height:1"
+                                 th:text="${#numbers.formatDecimal(globalTyt, 1, 2)}"></div>
+                            <div class="text-white mt-1">Puntaje Global</div>
+                            <span class="badge bg-white text-dark mt-2" th:text="${resultado.nivelGlobal}"></span>
+                            <div class="text-white small mt-1">
+                                N° Registro: <span th:text="${resultado.numeroRegistro}"></span>
+                            </div>
+                        </div>
+                        <!-- Competencias TyT -->
+                        <div class="row g-2 text-center">
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.comunicacionEscrita}"></div>
+                                    <small class="text-muted d-block">Com. Escrita</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.comunicacionEscritaNivel}"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.razonamientoCuantitativo}"></div>
+                                    <small class="text-muted d-block">Raz. Cuantitativo</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.razonCuantNivel}"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.lecturaCritica}"></div>
+                                    <small class="text-muted d-block">Lectura Crítica</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.lecturaCriticaNivel}"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.competenciasCiudadanas}"></div>
+                                    <small class="text-muted d-block">Comp. Ciudadanas</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.compCiudadanasNivel}"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.ingles}"></div>
+                                    <small class="text-muted d-block">Inglés</small>
+                                    <span class="badge bg-info text-dark" th:text="${resultado.nivelInglesCertificado}"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- competencias -->
-                    <div class="row g-2 text-center">
-                        <!-- bloques de competencias como ya los tenías -->
+
+                    <!-- Sin notas cargadas aún -->
+                    <div th:unless="${resultado.comunicacionEscrita != null
+                                     and resultado.razonamientoCuantitativo != null
+                                     and resultado.lecturaCritica != null
+                                     and resultado.competenciasCiudadanas != null
+                                     and resultado.ingles != null}"
+                         class="text-center py-4 text-muted">
+                        <i class="bi bi-hourglass-split fs-1 d-block mb-2"></i>
+                        Tus resultados aún no han sido cargados. Consulta con coordinación.
                     </div>
                 </div>
 
-                <!-- Saber Pro -->
+                <!-- ── Saber Pro ────────────────────────────────────── -->
                 <div th:if="${resultado != null and estudiante.tipoExamen.name() == 'SABER_PRO'}">
                     <div th:if="${resultado.anulado}" class="alert alert-danger py-2">
                         <i class="bi bi-exclamation-triangle me-1"></i>Tu examen Saber Pro fue anulado.
                     </div>
-                    <!-- aquí pondrías los resultados Saber Pro -->
+
+                    <!-- Puntaje global calculado (5 genéricas) -->
+                    <div th:if="${resultado.comunicacionEscrita != null
+                                 and resultado.razonamientoCuantitativo != null
+                                 and resultado.lecturaCritica != null
+                                 and resultado.competenciasCiudadanas != null
+                                 and resultado.ingles != null}"
+                         th:with="globalPro=${(resultado.comunicacionEscrita
+                                             + resultado.razonamientoCuantitativo
+                                             + resultado.lecturaCritica
+                                             + resultado.competenciasCiudadanas
+                                             + resultado.ingles) / 5}">
+                        <div class="text-center mb-4 p-4 bg-primary rounded">
+                            <div class="fw-bold text-white" style="font-size:4rem;line-height:1"
+                                 th:text="${#numbers.formatDecimal(globalPro, 1, 2)}"></div>
+                            <div class="text-white mt-1">Puntaje Global</div>
+                            <span class="badge bg-white text-dark mt-2" th:text="${resultado.nivelGlobal}"></span>
+                            <div class="text-white small mt-1">
+                                N° Registro: <span th:text="${resultado.numeroRegistro}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Competencias genéricas -->
+                        <p class="text-muted small fw-semibold mb-2">Competencias Genéricas</p>
+                        <div class="row g-2 text-center mb-3">
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.comunicacionEscrita}"></div>
+                                    <small class="text-muted d-block">Com. Escrita</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.comunicacionEscritaNivel}"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.razonamientoCuantitativo}"></div>
+                                    <small class="text-muted d-block">Raz. Cuantitativo</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.razonCuantNivel}"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.lecturaCritica}"></div>
+                                    <small class="text-muted d-block">Lectura Crítica</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.lecturaCriticaNivel}"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.competenciasCiudadanas}"></div>
+                                    <small class="text-muted d-block">Comp. Ciudadanas</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.compCiudadanasNivel}"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.ingles}"></div>
+                                    <small class="text-muted d-block">Inglés</small>
+                                    <span class="badge bg-info text-dark" th:text="${resultado.nivelInglesCertificado}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Competencias específicas -->
+                        <p class="text-muted small fw-semibold mb-2">Competencias Específicas</p>
+                        <div class="row g-2 text-center">
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.formulacionProyectosIngenieria}"></div>
+                                    <small class="text-muted d-block">Form. Proyectos</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.formProyectosNivel}"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md">
+                                <div class="comp-box">
+                                    <div class="valor" th:text="${resultado.disenoSoftware}"></div>
+                                    <small class="text-muted d-block">Diseño SW</small>
+                                    <span class="badge bg-secondary" th:text="${resultado.disenoSoftwareNivel}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sin notas cargadas aún -->
+                    <div th:unless="${resultado.comunicacionEscrita != null
+                                     and resultado.razonamientoCuantitativo != null
+                                     and resultado.lecturaCritica != null
+                                     and resultado.competenciasCiudadanas != null
+                                     and resultado.ingles != null}"
+                         class="text-center py-4 text-muted">
+                        <i class="bi bi-hourglass-split fs-1 d-block mb-2"></i>
+                        Tus resultados aún no han sido cargados. Consulta con coordinación.
+                    </div>
                 </div>
 
                 <!-- Sin resultado -->
