@@ -243,60 +243,60 @@
                         </div>
                     </div>
 
-                    <!-- Con datos Saber Pro -->
-                    <div th:if="${resultadoPro != null}" class="col-12">
-                        <div class="row g-2">
-                            <div class="col-6 col-md">
-                                <div class="comp-box">
-                                    <div class="valor" th:text="${resultadoPro.comunicacionEscrita}"></div>
-                                    <small class="text-muted d-block">Com. Escrita</small>
-                                    <span class="badge bg-secondary" th:text="${resultadoPro.comunicacionEscritaNivel}"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md">
-                                <div class="comp-box">
-                                    <div class="valor" th:text="${resultadoPro.razonamientoCuantitativo}"></div>
-                                    <small class="text-muted d-block">Raz. Cuantitativo</small>
-                                    <span class="badge bg-secondary" th:text="${resultadoPro.razonCuantNivel}"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md">
-                                <div class="comp-box">
-                                    <div class="valor" th:text="${resultadoPro.lecturaCritica}"></div>
-                                    <small class="text-muted d-block">Lectura Crítica</small>
-                                    <span class="badge bg-secondary" th:text="${resultadoPro.lecturaCriticaNivel}"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md">
-                                <div class="comp-box">
-                                    <div class="valor" th:text="${resultadoPro.competenciasCiudadanas}"></div>
-                                    <small class="text-muted d-block">Comp. Ciudadanas</small>
-                                    <span class="badge bg-secondary" th:text="${resultadoPro.compCiudadanasNivel}"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md">
-                                <div class="comp-box">
-                                    <div class="valor" th:text="${resultadoPro.ingles}"></div>
-                                    <small class="text-muted d-block">Inglés</small>
-                                    <span class="badge bg-info text-dark" th:text="${resultadoPro.nivelInglesCertificado}"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md">
-                                <div class="comp-box">
-                                    <div class="valor" th:text="${resultadoPro.formulacionProyectosIngenieria}"></div>
-                                    <small class="text-muted d-block">Form. Proyectos</small>
-                                    <span class="badge bg-secondary" th:text="${resultadoPro.formProyectosNivel}"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md">
-                                <div class="comp-box">
-                                    <div class="valor" th:text="${resultadoPro.disenoSoftware}"></div>
-                                    <small class="text-muted d-block">Diseño SW</small>
-                                    <span class="badge bg-secondary" th:text="${resultadoPro.disenoSoftwareNivel}"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+					<!-- Con datos Saber Pro -->
+					<div th:if="${resultadoPro != null}" class="col-12">
+					    <div class="row g-2">
+					        <div class="col-6 col-md">
+					            <div class="comp-box">
+					                <div class="valor" th:text="${resultadoPro.comunicacionEscrita}"></div>
+					                <small class="text-muted d-block">Com. Escrita</small>
+					                <span class="badge bg-secondary" th:text="${resultadoPro.comunicacionEscritaNivel}"></span>
+					            </div>
+					        </div>
+					        <div class="col-6 col-md">
+					            <div class="comp-box">
+					                <div class="valor" th:text="${resultadoPro.razonamientoCuantitativo}"></div>
+					                <small class="text-muted d-block">Raz. Cuantitativo</small>
+					                <span class="badge bg-secondary" th:text="${resultadoPro.razonCuantNivel}"></span>
+					            </div>
+					        </div>
+					        <div class="col-6 col-md">
+					            <div class="comp-box">
+					                <div class="valor" th:text="${resultadoPro.lecturaCritica}"></div>
+					                <small class="text-muted d-block">Lectura Crítica</small>
+					                <span class="badge bg-secondary" th:text="${resultadoPro.lecturaCriticaNivel}"></span>
+					            </div>
+					        </div>
+					        <div class="col-6 col-md">
+					            <div class="comp-box">
+					                <div class="valor" th:text="${resultadoPro.competenciasCiudadanas}"></div>
+					                <small class="text-muted d-block">Comp. Ciudadanas</small>
+					                <span class="badge bg-secondary" th:text="${resultadoPro.compCiudadanasNivel}"></span>
+					            </div>
+					        </div>
+					        <div class="col-6 col-md">
+					            <div class="comp-box">
+					                <div class="valor" th:text="${resultadoPro.ingles}"></div>
+					                <small class="text-muted d-block">Inglés</small>
+					                <span class="badge bg-info text-dark" th:text="${resultadoPro.nivelInglesCertificado}"></span>
+					            </div>
+					        </div>
+					        <div class="col-6 col-md">
+					            <div class="comp-box">
+					                <div class="valor" th:text="${resultadoPro.formulacionProyectosIngenieria}"></div>
+					                <small class="text-muted d-block">Form. Proyectos</small>
+					                <span class="badge bg-secondary" th:text="${resultadoPro.formProyectosNivel}"></span>
+					            </div>
+					        </div>
+					        <div class="col-6 col-md">
+					            <div class="comp-box">
+					                <div class="valor" th:text="${resultadoPro.disenoSoftware}"></div>
+					                <small class="text-muted d-block">Diseño SW</small>
+					                <span class="badge bg-secondary" th:text="${resultadoPro.disenoSoftwareNivel}"></span>
+					            </div>
+					        </div>
+					    </div>
+					</div>
 
                     <!-- Sin datos — placeholders con guiones -->
                     <div th:if="${resultadoTyt == null and resultadoPro == null}" class="col-12">

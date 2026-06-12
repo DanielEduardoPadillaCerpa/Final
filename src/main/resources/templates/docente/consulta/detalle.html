@@ -45,26 +45,69 @@
             </div>
         </div>
         <div class="col-md-8">
+
             <!-- Resultado único TyT -->
-            <div class="section-card h-100 d-flex flex-column align-items-center justify-content-center text-center"
-                 th:if="${resultadoTyt != null}">
-                <h6 class="fw-bold mb-3 align-self-start">Resultado Único — TyT</h6>
-                <div class="bg-info bg-opacity-10 rounded p-4 w-100">
-                    <div class="fw-bold fs-1 text-white" th:text="${resultadoTyt.puntajeGlobal}"></div>
-                    <div class="text-white">Puntaje Global</div>
-                    <span class="badge bg-info text-dark mt-2" th:text="${resultadoTyt.nivelGlobal}"></span>
+            <div th:if="${resultadoTyt != null}" class="section-card h-100">
+                <h6 class="fw-bold mb-3">Resultado Único — TyT</h6>
+                <div th:if="${resultadoTyt.comunicacionEscrita != null
+                             and resultadoTyt.razonamientoCuantitativo != null
+                             and resultadoTyt.lecturaCritica != null
+                             and resultadoTyt.competenciasCiudadanas != null
+                             and resultadoTyt.ingles != null}"
+                     th:with="globalTyt=${(resultadoTyt.comunicacionEscrita
+                                         + resultadoTyt.razonamientoCuantitativo
+                                         + resultadoTyt.lecturaCritica
+                                         + resultadoTyt.competenciasCiudadanas
+                                         + resultadoTyt.ingles) / 5}"
+                     class="bg-info rounded p-4 text-center">
+                    <div class="fw-bold text-white" style="font-size:4rem;line-height:1"
+                         th:text="${#numbers.formatDecimal(globalTyt, 1, 2)}"></div>
+                    <div class="text-white mt-1">Puntaje Global</div>
+                    <span class="badge bg-white text-dark mt-2" th:text="${resultadoTyt.nivelGlobal}"></span>
+                </div>
+                <div th:unless="${resultadoTyt.comunicacionEscrita != null
+                                 and resultadoTyt.razonamientoCuantitativo != null
+                                 and resultadoTyt.lecturaCritica != null
+                                 and resultadoTyt.competenciasCiudadanas != null
+                                 and resultadoTyt.ingles != null}"
+                     class="bg-light rounded p-4 text-center text-muted">
+                    <i class="bi bi-hourglass-split fs-1 d-block mb-2"></i>
+                    <div class="fw-semibold">Sin resultados registrados</div>
+                    <div class="small mt-1">Las notas aún no han sido ingresadas</div>
                 </div>
             </div>
+
             <!-- Resultado único Saber Pro -->
-            <div class="section-card h-100 d-flex flex-column align-items-center justify-content-center text-center"
-                 th:if="${resultadoPro != null}">
-                <h6 class="fw-bold mb-3 align-self-start">Resultado Único — Saber Pro</h6>
-                <div class="bg-primary bg-opacity-10 rounded p-4 w-100">
-                    <div class="fw-bold fs-1 text-white" th:text="${resultadoPro.puntajeGlobal}"></div>
-                    <div class="text-white">Puntaje Global</div>
-                    <span class="badge bg-primary mt-2" th:text="${resultadoPro.nivelGlobal}"></span>
+            <div th:if="${resultadoPro != null}" class="section-card h-100">
+                <h6 class="fw-bold mb-3">Resultado Único — Saber Pro</h6>
+                <div th:if="${resultadoPro.comunicacionEscrita != null
+                             and resultadoPro.razonamientoCuantitativo != null
+                             and resultadoPro.lecturaCritica != null
+                             and resultadoPro.competenciasCiudadanas != null
+                             and resultadoPro.ingles != null}"
+                     th:with="globalPro=${(resultadoPro.comunicacionEscrita
+                                         + resultadoPro.razonamientoCuantitativo
+                                         + resultadoPro.lecturaCritica
+                                         + resultadoPro.competenciasCiudadanas
+                                         + resultadoPro.ingles) / 5}"
+                     class="bg-primary rounded p-4 text-center">
+                    <div class="fw-bold text-white" style="font-size:4rem;line-height:1"
+                         th:text="${#numbers.formatDecimal(globalPro, 1, 2)}"></div>
+                    <div class="text-white mt-1">Puntaje Global</div>
+                    <span class="badge bg-white text-dark mt-2" th:text="${resultadoPro.nivelGlobal}"></span>
+                </div>
+                <div th:unless="${resultadoPro.comunicacionEscrita != null
+                                 and resultadoPro.razonamientoCuantitativo != null
+                                 and resultadoPro.lecturaCritica != null
+                                 and resultadoPro.competenciasCiudadanas != null
+                                 and resultadoPro.ingles != null}"
+                     class="bg-light rounded p-4 text-center text-muted">
+                    <i class="bi bi-hourglass-split fs-1 d-block mb-2"></i>
+                    <div class="fw-semibold">Sin resultados registrados</div>
+                    <div class="small mt-1">Las notas aún no han sido ingresadas</div>
                 </div>
             </div>
+
             <!-- Sin resultados -->
             <div class="section-card h-100 d-flex flex-column align-items-center justify-content-center text-center"
                  th:if="${resultadoTyt == null and resultadoPro == null}">
@@ -79,6 +122,9 @@
         <div class="col-12">
             <div class="section-card">
                 <h6 class="fw-bold mb-3">Resultado Total — TyT</h6>
+                <div th:if="${resultadoTyt.anulado}" class="alert alert-danger py-1 mb-3">
+                    <i class="bi bi-exclamation-triangle me-1"></i>Examen anulado
+                </div>
                 <div class="row g-2 text-center">
                     <div class="col-6 col-md">
                         <div class="bg-light rounded p-2">
@@ -128,41 +174,58 @@
                 <div th:if="${resultadoPro.anulado}" class="alert alert-danger py-1 mb-3">
                     <i class="bi bi-exclamation-triangle me-1"></i>Examen anulado
                 </div>
-                <div class="row g-2 text-center">
+                <p class="text-muted small mb-2 fw-semibold">Competencias Genéricas</p>
+                <div class="row g-2 text-center mb-3">
                     <div class="col-6 col-md">
                         <div class="bg-light rounded p-2">
                             <div class="fw-bold fs-5" th:text="${resultadoPro.comunicacionEscrita}"></div>
                             <small class="text-muted d-block">Com. Escrita</small>
+                            <span class="badge bg-secondary" th:text="${resultadoPro.comunicacionEscritaNivel}"></span>
                         </div>
                     </div>
                     <div class="col-6 col-md">
                         <div class="bg-light rounded p-2">
                             <div class="fw-bold fs-5" th:text="${resultadoPro.razonamientoCuantitativo}"></div>
-                            <small class="text-muted d-block">Raz. Cuant.</small>
+                            <small class="text-muted d-block">Raz. Cuantitativo</small>
+                            <span class="badge bg-secondary" th:text="${resultadoPro.razonCuantNivel}"></span>
                         </div>
                     </div>
                     <div class="col-6 col-md">
                         <div class="bg-light rounded p-2">
                             <div class="fw-bold fs-5" th:text="${resultadoPro.lecturaCritica}"></div>
-                            <small class="text-muted d-block">Lect. Crítica</small>
+                            <small class="text-muted d-block">Lectura Crítica</small>
+                            <span class="badge bg-secondary" th:text="${resultadoPro.lecturaCriticaNivel}"></span>
                         </div>
                     </div>
+                    <div class="col-6 col-md">
+                        <div class="bg-light rounded p-2">
+                            <div class="fw-bold fs-5" th:text="${resultadoPro.competenciasCiudadanas}"></div>
+                            <small class="text-muted d-block">Comp. Ciudadanas</small>
+                            <span class="badge bg-secondary" th:text="${resultadoPro.compCiudadanasNivel}"></span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md">
+                        <div class="bg-light rounded p-2">
+                            <div class="fw-bold fs-5" th:text="${resultadoPro.ingles}"></div>
+                            <small class="text-muted d-block">Inglés</small>
+                            <span class="badge bg-info text-dark" th:text="${resultadoPro.nivelInglesCertificado}"></span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-muted small mb-2 fw-semibold">Competencias Específicas</p>
+                <div class="row g-2 text-center">
                     <div class="col-6 col-md">
                         <div class="bg-light rounded p-2">
                             <div class="fw-bold fs-5" th:text="${resultadoPro.formulacionProyectosIngenieria}"></div>
                             <small class="text-muted d-block">Form. Proyectos</small>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md">
-                        <div class="bg-light rounded p-2">
-							<div class="fw-bold fs-5" th:text="${resultadoPro.pensamientoCientificoMatematicas}"></div>
-							<small class="text-muted d-block">Pens. Científico</small>
+                            <span class="badge bg-secondary" th:text="${resultadoPro.formProyectosNivel}"></span>
                         </div>
                     </div>
                     <div class="col-6 col-md">
                         <div class="bg-light rounded p-2">
                             <div class="fw-bold fs-5" th:text="${resultadoPro.disenoSoftware}"></div>
                             <small class="text-muted d-block">Diseño SW</small>
+                            <span class="badge bg-secondary" th:text="${resultadoPro.disenoSoftwareNivel}"></span>
                         </div>
                     </div>
                 </div>
@@ -182,27 +245,50 @@
                         </thead>
                         <tbody>
                             <tr th:each="b : ${beneficios}"
-                                th:classappend="${(resultadoTyt != null and resultadoTyt.puntajeGlobal != null
-                                    and resultadoTyt.puntajeGlobal >= b.puntajeMinimo
-                                    and (b.puntajeMaximo == null or resultadoTyt.puntajeGlobal <= b.puntajeMaximo))
-                                    or (resultadoPro != null and resultadoPro.puntajeGlobal != null
-                                    and resultadoPro.puntajeGlobal >= b.puntajeMinimo
-                                    and (b.puntajeMaximo == null or resultadoPro.puntajeGlobal <= b.puntajeMaximo))} ? 'table-success' : ''">
+                                th:with="globalTyt=${(resultadoTyt != null
+                                              and resultadoTyt.comunicacionEscrita != null
+                                              and resultadoTyt.razonamientoCuantitativo != null
+                                              and resultadoTyt.lecturaCritica != null
+                                              and resultadoTyt.competenciasCiudadanas != null
+                                              and resultadoTyt.ingles != null)
+                                             ? (resultadoTyt.comunicacionEscrita
+                                              + resultadoTyt.razonamientoCuantitativo
+                                              + resultadoTyt.lecturaCritica
+                                              + resultadoTyt.competenciasCiudadanas
+                                              + resultadoTyt.ingles) / 5 : null},
+                                         globalPro=${(resultadoPro != null
+                                              and resultadoPro.comunicacionEscrita != null
+                                              and resultadoPro.razonamientoCuantitativo != null
+                                              and resultadoPro.lecturaCritica != null
+                                              and resultadoPro.competenciasCiudadanas != null
+                                              and resultadoPro.ingles != null)
+                                             ? (resultadoPro.comunicacionEscrita
+                                              + resultadoPro.razonamientoCuantitativo
+                                              + resultadoPro.lecturaCritica
+                                              + resultadoPro.competenciasCiudadanas
+                                              + resultadoPro.ingles) / 5 : null}"
+                                th:classappend="${(globalTyt != null and globalTyt >= b.puntajeMinimo
+                                                    and (b.puntajeMaximo == null or globalTyt <= b.puntajeMaximo))
+                                                 or (globalPro != null and globalPro >= b.puntajeMinimo
+                                                    and (b.puntajeMaximo == null or globalPro <= b.puntajeMaximo))} ? 'table-success' : ''">
                                 <td><span class="badge bg-success" th:text="${b.codigo}"></span></td>
                                 <td th:text="${b.puntajeMinimo} + ' – ' + (${b.puntajeMaximo} != null ? ${b.puntajeMaximo} : '∞')"></td>
                                 <td th:text="${b.seminarioNivel}"></td>
                                 <td th:text="${b.notaSeminario}"></td>
                                 <td th:text="${b.becaPorcentaje > 0} ? (${b.becaPorcentaje} + '%') : '—'"></td>
-                                <td>
+                                <td class="text-center">
                                     <span class="badge bg-success"
-                                          th:if="${(resultadoTyt != null and resultadoTyt.puntajeGlobal != null
-                                              and resultadoTyt.puntajeGlobal >= b.puntajeMinimo
-                                              and (b.puntajeMaximo == null or resultadoTyt.puntajeGlobal <= b.puntajeMaximo))
-                                              or (resultadoPro != null and resultadoPro.puntajeGlobal != null
-                                              and resultadoPro.puntajeGlobal >= b.puntajeMinimo
-                                              and (b.puntajeMaximo == null or resultadoPro.puntajeGlobal <= b.puntajeMaximo))}">
+                                          th:if="${(globalTyt != null and globalTyt >= b.puntajeMinimo
+                                                    and (b.puntajeMaximo == null or globalTyt <= b.puntajeMaximo))
+                                                 or (globalPro != null and globalPro >= b.puntajeMinimo
+                                                    and (b.puntajeMaximo == null or globalPro <= b.puntajeMaximo))}">
                                         ✓ Aplica
                                     </span>
+                                    <span class="text-muted"
+                                          th:unless="${(globalTyt != null and globalTyt >= b.puntajeMinimo
+                                                    and (b.puntajeMaximo == null or globalTyt <= b.puntajeMaximo))
+                                                 or (globalPro != null and globalPro >= b.puntajeMinimo
+                                                    and (b.puntajeMaximo == null or globalPro <= b.puntajeMaximo))}">—</span>
                                 </td>
                             </tr>
                         </tbody>
